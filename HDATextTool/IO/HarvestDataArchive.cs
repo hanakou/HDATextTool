@@ -1,7 +1,6 @@
 ﻿using System.IO;
 
 using HDATextTool.IO.Compression;
-using System.Text;
 
 namespace HDATextTool.IO
 {

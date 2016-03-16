@@ -31,10 +31,11 @@ namespace HDATextTool.IO.Compression
                          * Direct copy
                          */
 
-                        if (Header == 0)
-                            Length = Data[DataOffset++] + 0x12;
-                        else
-                            Length = Header + 3;
+                        if ((Length = Header + 3) == 3)
+                        {
+                            while ((Header = Data[DataOffset++]) == 0) Length += 0xff;
+                            Length += Header + 0xf;
+                        }
 
                         Output.Write(Data, DataOffset, Length);
                         DataOffset += Length;
