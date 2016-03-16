@@ -17,7 +17,7 @@ The file "EVTMSG12.HDA" is just a example (it contains the texts of the intro), 
 
 Texts even after decompressed, have another layer of proprietary encoding that will make hard to edit the text, so once again, you need to use the tool to extract the text in a format that is easy to edit.
 
-To extract the text, you can use the -xtxt command. The texts are separated into two files, one containing the texts, and another containing the pointers to the text. You need to supply both to the tool, otherwise it won't know where each dialog is located. It is always the file right after the text. So if "File_00001.bin" have text, "File_00002.bin" is the pointers for that text. You can extract with this command: "HDATextTool -xtxt File_00001.bin File_00002.bin texts.txt".
+To extract the text, you can use the -xtxt command. The texts are separated into two files, one containing the texts, and another containing the pointers to the text. You need to supply both to the tool, otherwise it won't know where each dialog is located. It is usually (but no always!) the file right after the text. So if "File_00001.bin" have text, "File_00002.bin" is the pointers for that text. You can extract with this command: "HDATextTool -xtxt File_00001.bin File_00002.bin texts.txt".
 
 Re-creating the texts it's similar, you can use "HDATextTool -ctxt texts.txt File_00001.bin File_00002.bin" to do the inverse of the previous step, and re-create the texts.
 Remember to delete the *.txt file before creating the HDA!
