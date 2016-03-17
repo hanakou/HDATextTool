@@ -25,12 +25,10 @@ namespace HDATextTool.IO.Compression
                     int DirectCopy;
                     byte Header = Data[DataOffset++];
 
-                    if (Header < 0x10) //0x00 ~ 0x0f
+                    if (Header < 0x10)
                     {
-                        /*
-                         * Direct copy
-                         */
-
+                        //Direct copy
+                        //0x00 ~ 0x0f
                         if ((Length = Header + 3) == 3)
                         {
                             while ((Header = Data[DataOffset++]) == 0) Length += 0xff;
@@ -42,12 +40,12 @@ namespace HDATextTool.IO.Compression
                     }
                     else
                     {
-                        /*
-                         * Compressed
-                         */
-
-                        if (Header < 0x20) //0x10 ~ 0x1f
+                        //Compressed
+                        if (Header < 0x20)
                         {
+                            //0x10 ~ 0x1f
+                            Back = (Header & 8) << 11;
+
                             if ((Length = (Header & 7) + 2) == 2)
                             {
                                 while ((Header = Data[DataOffset++]) == 0) Length += 0xff;
@@ -55,11 +53,12 @@ namespace HDATextTool.IO.Compression
                             }
 
                             DirectCopy = Data[DataOffset] & 3;
-                            Back = (Data[DataOffset++] >> 2) | (Data[DataOffset++] << 6) | ((Header & 8) << 11);
-                            if (Back != 0) Back += 0x4000; else break; //Compression end
+                            Back = ((Data[DataOffset++] >> 2) | (Data[DataOffset++] << 6) | Back) + 0x4000;
+                            if (Back == 0x4000) break; //Compression end
                         }
-                        else if (Header < 0x40) //0x20 ~ 0x3f
+                        else if (Header < 0x40)
                         {
+                            //0x20 ~ 0x3f
                             if ((Length = (Header & 0x1f) + 2) == 2)
                             {
                                 while ((Header = Data[DataOffset++]) == 0) Length += 0xff;
@@ -69,8 +68,9 @@ namespace HDATextTool.IO.Compression
                             DirectCopy = Data[DataOffset] & 3;
                             Back = ((Data[DataOffset++] >> 2) | (Data[DataOffset++] << 6)) + 1;
                         }
-                        else //0x40 ~ 0xff
+                        else
                         {
+                            //0x40 ~ 0xff
                             Length = (Header >> 5) + 1;
                             DirectCopy = Header & 3;
                             Back = (((Header >> 2) & 7) | (Data[DataOffset++] << 3)) + 1;

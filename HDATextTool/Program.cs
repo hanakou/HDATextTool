@@ -11,7 +11,7 @@ namespace HDATextTool
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("HDATextTool by gdkchan");
-            Console.WriteLine("Version 0.2.0");
+            Console.WriteLine("Version 0.3.0");
             Console.ResetColor();
             Console.Write(Environment.NewLine);
 
