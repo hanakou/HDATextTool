@@ -21,7 +21,7 @@ namespace HDATextTool.IO
             {
                 using (FileStream PointersStream = new FileStream(Pointers, FileMode.Open))
                 {
-                    return HarvestText.Decode(DataStream, PointersStream);
+                    return Decode(DataStream, PointersStream);
                 }
             }
         }
@@ -131,7 +131,7 @@ namespace HDATextTool.IO
                         Pointer.Write((uint)Data.Position);
   
                         byte Header = 0;
-                        byte Mask = 0;
+                        int Mask = 0;
                         long Position = 0;
                         long HeaderPosition = Data.Position;
                         for (int Index = 0; Index < Dialog.Length; Index++)
@@ -149,11 +149,15 @@ namespace HDATextTool.IO
                                 Mask = 0x80;
                             }
 
-                            if (Index + 2 <= Dialog.Length && Dialog.Substring(Index, 2) == Environment.NewLine)
+                            if (Index + 2 <= Dialog.Length && Dialog.Substring(Index, 2) == "\r\n")
                             {
-                                //Line break
+                                //Line break (Windows)
+                                Data.WriteByte(0); Index++;
+                            }
+                            else if (Dialog[Index] == '\n')
+                            {
+                                //Line break (Linux)
                                 Data.WriteByte(0);
-                                Index++;
                             }
                             else if (Index + 2 <= Dialog.Length && Dialog.Substring(Index, 2) == "\\x")
                             {
@@ -164,7 +168,7 @@ namespace HDATextTool.IO
                                 if (Value > 0xff)
                                 {
                                     Writer.Write(Value);
-                                    Header |= Mask;
+                                    Header |= (byte)Mask;
                                 }
                                 else
                                     Data.WriteByte((byte)Value);
@@ -182,6 +186,7 @@ namespace HDATextTool.IO
                                     for (int TblIndex = 0; TblIndex < Table.Length; TblIndex++)
                                     {
                                         string TblValue = Table[TblIndex];
+
                                         if (TblValue == null || Index + TblValue.Length > Dialog.Length) continue;
 
                                         if (Dialog.Substring(Index, TblValue.Length) == TblValue)
@@ -200,13 +205,13 @@ namespace HDATextTool.IO
                                     if (Value > 0xff)
                                     {
                                         Writer.Write((ushort)Value);
-                                        Header |= Mask;
+                                        Header |= (byte)Mask;
                                     }
                                     else
                                     {
                                         Data.WriteByte((byte)Value);
                                         if (Value == 7) Mask <<= 1;
-                                    }                                    
+                                    }
                                 }
                                 else
                                     Data.WriteByte(0x10); //Unknown, add space

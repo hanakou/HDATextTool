@@ -11,7 +11,7 @@ namespace HDATextTool
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("HDATextTool by gdkchan");
-            Console.WriteLine("Version 0.3.0");
+            Console.WriteLine("Version 0.3.1");
             Console.ResetColor();
             Console.Write(Environment.NewLine);
 
@@ -50,23 +50,6 @@ namespace HDATextTool
             Console.WriteLine("tool.exe -ctxt in.txt text.bin pointers.bin  Create text");
             Console.WriteLine("tool.exe -fixelf SLUS_202.51 lba file_size  Recalculate LBA table");
             Console.Write(Environment.NewLine);
-
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("How to use the -fixelf command:");
-            Console.ResetColor();
-            Console.Write(Environment.NewLine);
-
-            Console.WriteLine("You should always use this whenever you replace a file on the CD.");
-            Console.WriteLine("It will recalculate the LBAs inside the executable.");
-            Console.WriteLine("If you rebuild the image without fixing the executable,");
-            Console.WriteLine("the game will most likely crash.");
-            Console.WriteLine("First, get the LBA value of the file you're going to modify on");
-            Console.WriteLine("your CD image editing software.");
-            Console.WriteLine("Then, look the size of the modified HDA file generated with this tool.");
-            Console.WriteLine("Now call the -fixelf command with the path to the ELF,");
-            Console.WriteLine("the LBA value and the new size of the file.");
-            Console.WriteLine("You should insert one file at a time, and do this process.");
-            Console.WriteLine("Example: HDATextTool -fixelf 541 12345 (always decimal, not hex).");
         }
     }
 }
