@@ -71,7 +71,7 @@ namespace HDATextTool.IO
                     else
                     {
                         if (Table[Value] == null)
-                            Output.Append(string.Format("\\x{0:X4}", Value));
+                            Output.Append(string.Format("[var]\x{0:X4}", Data.ReadByte()));
                         else
                             Output.Append(Table[Value]);
                     }
